@@ -1,0 +1,8 @@
+init: 'echo run-init'
+restore: 'echo run-restore'
+remove: 'echo run-remove && exit 1'
+backup: 'echo run-backup'
+test-data: 'echo run-test-data'
+data-location:
+  - location1の説明
+  - location2の説明
