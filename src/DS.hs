@@ -9,14 +9,19 @@ module DS
     ) where
 
 import           Control.Monad
-import qualified Data.Yaml      as Y
+import qualified Data.Yaml        as Y
 import           DS.Types
-import           System.Exit    (ExitCode (..))
-import           System.IO      (Handle, hGetContents)
-import qualified System.Process as SP
+import qualified System.Directory as SD
+import           System.Exit      (ExitCode (..), exitFailure)
+import           System.IO        (Handle, hGetContents, hPutStrLn, stderr)
+import qualified System.Process   as SP
 
 generateEmptyYaml :: FilePath -> IO ()
-generateEmptyYaml path = Y.encodeFile path emptyDSConfig
+generateEmptyYaml path = do
+    isExist <- SD.doesFileExist path
+    if not isExist
+        then Y.encodeFile path emptyDSConfig
+        else hPutStrLn stderr (path ++ " exists, don't overwrite this.") >> exitFailure
 
 fileIsNotValid :: FilePath -> IO ()
 fileIsNotValid path = putStrLn $ path ++ " is not found or not yaml."
